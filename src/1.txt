@@ -1,0 +1,4 @@
+let pageURL = 'http://localhost:3000/news';
+  if (nextPage) {
+    pageURL = pageURL.concat('/page/' + nextPage);
+  }

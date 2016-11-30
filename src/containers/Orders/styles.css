@@ -1,0 +1,21 @@
+.full-width-panel {
+
+        /* undo the white-space setting ag-Fresh puts in */
+
+        white-space: normal;
+
+        height: 100%;
+
+        width: 100%;
+
+        border: 2px solid lightgray;
+
+        border-style: ridge;
+
+        box-sizing: border-box;
+
+        padding: 5px;
+
+        background-color: background: #fafafa;
+
+    }

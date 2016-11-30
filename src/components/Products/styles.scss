@@ -1,0 +1,71 @@
+
+.listView .listViewItem {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+.treeView ul {
+  padding-left: 15px;
+}
+.treeView ul:first-child {
+  padding-left: 5px;
+}
+
+.pagination {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+.thumbnail {
+   height:350px;
+   overflow-y: auto;
+   overflow-x:hidden;
+}
+
+.itemCaption{
+  font-size: 1.1em;
+  line-height: 95%;
+}
+.itemPromo{
+  font-size: 0.9em;
+  color: red;
+  line-height: 99%;
+}
+.itemDescription{
+  font-size: 0.8em;
+  line-height: 99%;
+}
+.itemPrice{
+
+}
+
+.oldPrice {
+  color: lighten(#000, 40%);
+  text-decoration: line-through;
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+.actualPrice {
+  border: 5px solid #FC7F19;
+  background-color: #FC7F19;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.itemImage{
+  height: 150px;
+  width: 200px;
+  cursor: pointer;
+}
+.promoImg {
+  position: relative;
+  height: 40%;
+  width: 40%;
+  left: -60px;
+  top: -10px;
+  z-index: 2;
+}
+.mainImg{
+  position: relative;
+  z-index: 1;
+  top: -55px;
+  height: 150px;
+  width: 200px;
+}

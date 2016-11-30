@@ -1,0 +1,32 @@
+.panel-body a{
+  text-decoration: none;
+  line-height: 1.8;
+  color: lighten(#000, 40%);
+  &:hover {
+    font-weight: bold;
+    color: darken(#2FA4E7, 15%);
+  }
+  &:focus {
+    font-weight: bold;
+    color: darken(#2FA4E7, 15%);
+  }
+}
+
+.selected{
+  background-color: #CAEEFA;
+}
+.togglable-down::after,
+.togglable-up::after {
+  font-size: 8px;
+  margin-left: 0.5em;
+}
+
+.togglable-down::after {
+  content: "▼";
+  display: inline-block;
+}
+
+.togglable-up::after {
+  content: "▶";
+  display: inline-block;
+}

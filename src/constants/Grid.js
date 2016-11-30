@@ -1,0 +1,1 @@
+export const SET_CURR_ROW_KEY = 'SET_CURR_ROW_KEY'
