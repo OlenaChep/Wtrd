@@ -2,6 +2,14 @@ import React, {Component} from 'react'
 import * as widgets from '../Widgets';
 
 export class ThumbnailsView extends Component{
+  static propTypes = {
+    data: React.PropTypes.array,
+    itemClassName: React.PropTypes.string.isRequired,
+    linkURL: React.PropTypes.string,
+    onItemClick: React.PropTypes.func,
+    galleryClassName: React.PropTypes.string.isRequired
+  }
+
   constructor(props) {
     super(props);
   }

@@ -3,6 +3,14 @@ import { Link } from 'react-router'
 import {STATIC_URL} from '../../constants/Common';
 
 export class ProductCategoryCard extends Component{
+  static propTypes = {
+    item: React.PropTypes.object.isRequired,
+    compKey: React.PropTypes.number.isRequired,
+    linkURL: React.PropTypes.string.isRequired,
+    itemClassName: React.PropTypes.string.isRequired,
+    onClick: React.PropTypes.func
+  }
+
   render() {
     return (
       <Thumbnail defImgURL={STATIC_URL + '/ggroup_default.jpg'}
@@ -18,8 +26,12 @@ export class ProductCategoryCard extends Component{
 
 
 export class ProductCard extends Component{
-  getLink(linkURL, id) {
-    return linkURL + id;
+  static propTypes = {
+    item: React.PropTypes.object.isRequired,
+    compKey: React.PropTypes.number.isRequired,
+    linkURL: React.PropTypes.string.isRequired,
+    itemClassName: React.PropTypes.string.isRequired,
+    onClick: React.PropTypes.func
   }
 
   render() {
@@ -36,7 +48,7 @@ export class ProductCard extends Component{
     const linkURL = this.props.linkURL;
     if (promo) {
       imgTemplate = (
-        <Link to={::this.getLink(linkURL, key)} className='itemImage'>
+        <Link to={Thumbnail.getLink(linkURL, key)} className='itemImage'>
             <img src={STATIC_URL + '/promo.png'} alt='promo' className='promoImg' />
             <img src={imgURL || defImgURL} alt={imgAlt || 'image'+key} className='mainImg' />
         </Link>
@@ -48,7 +60,8 @@ export class ProductCard extends Component{
       item={this.props.item}
       itemClassName = {this.props.itemClassName}
       compKey = {this.props.compKey}
-      onClick = {this.props.onClick}>
+      onClick = {this.props.onClick}
+      linkURL = {this.props.linkURL}>
       <p className='itemPromo'>{promo}</p>
       <div className='itemPrice'>
         <p className='oldPrice'>{oldPrice}</p>
@@ -61,22 +74,37 @@ export class ProductCard extends Component{
 }
 
 class Thumbnail extends Component{
-  getLink(linkURL, id) {
-    return linkURL + id;
+  static propTypes = {
+    item: React.PropTypes.object.isRequired,
+    compKey: React.PropTypes.number.isRequired,
+    linkURL: React.PropTypes.string.isRequired,
+    defImgURL: React.PropTypes.string,
+    itemClassName: React.PropTypes.string.isRequired,
+    onClick: React.PropTypes.func,
+    imgTemplate: React.PropTypes.element
+  }
+
+  static getLink(linkURL, id) {
+    if (linkURL && (linkURL[linkURL.length -1] === '/')) {
+      return linkURL + id;
+    }
+    else {
+      return linkURL + '/' + id;
+    }
   }
 
   render() {
     const {imgURL, imgAlt, caption} = this.props.item;
     const key = this.props.compKey;
     const linkURL = this.props.linkURL;
-    let imgTemplate = this.props.imgTemplate || (<Link to={::this.getLink(linkURL, key)}><img src={imgURL || this.props.defImgURL} alt={imgAlt || 'image'+key} className='itemImage'/></Link>);
+    let imgTemplate = this.props.imgTemplate || (<Link to={Thumbnail.getLink(linkURL, key)}><img src={imgURL || this.props.defImgURL} alt={imgAlt || 'image'+key} className='itemImage'/></Link>);
 
     return (
-      <div className={this.props.itemClassName} key={key}>
+      <div className={this.props.itemClassName} key={key} onClick={this.props.onClick}>
         <div className='thumbnail'>
           {imgTemplate}
           <div className='caption'>
-            <p className='itemCaption'><Link to={::this.getLink(linkURL, key)} >{caption}</Link></p>
+            <p className='itemCaption'><Link to={Thumbnail.getLink(linkURL, key)} >{caption}</Link></p>
             {this.props.children}
           </div>
         </div>

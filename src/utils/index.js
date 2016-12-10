@@ -22,6 +22,17 @@ export function parseJSON(response) {
      return response.json()
 }
 
+export function getPageFetchURL(perPage, nextPage, pageURL) {
+  let start = perPage * (nextPage - 1);
+  let limit = perPage;
+
+  if (pageURL.lastIndexOf('?') > 0) {
+    return pageURL + '&limit=' + limit + '&offset=' + start;
+  } else {
+    return pageURL + '?limit=' + limit + '&offset=' + start;
+  }  
+}
+
 export function makeActionCreator(type) {
   return function(objKey, payload) {
     let action;
@@ -54,7 +65,7 @@ export function makeDataLoader(types, dataURL) {
 
   return function(objKey, params) {
     let configDefault = {
-      method: 'POST',
+      method: 'GET',
       credentials: 'include',
       headers: {
         'Accept': 'application/json',

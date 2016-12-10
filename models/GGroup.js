@@ -12,9 +12,4 @@ let GGroup = db.define('goods_groups', {
 );
 GGroup.isHierarchy();
 
-/*Contractor.sync().then(function() {
-
-Contractor.addNew('Bce', null).then(function(contractor) {
-  Contractor.addNew('Contr1', 3);
-})*/
 module.exports = GGroup;

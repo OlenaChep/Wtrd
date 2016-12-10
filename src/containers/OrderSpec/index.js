@@ -8,6 +8,12 @@ import {sumCellRenderer} from '../../components/GridView'
 import './styles.css'
 
 class OrderSpec extends Component {
+  static propTypes = {
+    token: React.PropTypes.string,
+    getOrderSpec: React.PropTypes.func,
+    getLoading: React.PropTypes.func
+  }
+
   constructor(props) {
     super(props);
     this.columnDefs =  [
@@ -26,34 +32,27 @@ class OrderSpec extends Component {
     e.preventDefault();
     let orderId = this.getOrderId();
     if (orderId) {
-      this.props.actions.loadOrderSpec(orderId, this.props.user.token);
+      this.props.actions.loadOrderSpec(orderId, this.props.token);
     }
   }
 
   componentDidMount() {
-    this.props.actions.loadOrderSpec(this.getOrderId(), this.props.user.token);
+    this.props.actions.loadOrderSpec(this.getOrderId(), this.props.token);
   }
 
   componentWillReceiveProps(nextProps) {
     if ((this.props.data.id !== nextProps.data.id) ||
-        (nextProps.user.token !== this.props.user.token)) {
-      this.props.actions.loadOrderSpec(nextProps.data.id, nextProps.user.token);
+        (nextProps.token !== this.props.token)) {
+      this.props.actions.loadOrderSpec(nextProps.data.id, nextProps.token);
     }
   }
 
   render() {
-    let rowData = [];
     let orderId = this.getOrderId();
-    if (this.props.orderSpec && this.props.orderSpec[orderId]) {
-      rowData = this.props.orderSpec[orderId].items;
-    }
-    let loading = this.props.orderSpec && this.props.orderSpec[orderId] &&
-      this.props.orderSpec[orderId].loading;
-    /*var selectRowProp = {
-           mode: 'radio',
-           clickToSelect: true,
-           selected: this.state.selected  //give a default selected row.
-    };*/
+
+    let rowData = this.props.getOrderSpec(orderId);
+    let loading = this.props.getLoading(orderId);
+
     let height = 150;
     return (
       <div className='full-width-panel'>
@@ -70,43 +69,11 @@ class OrderSpec extends Component {
   }
 }
 
-/*
-*/
-/*
-
-*/
-/*
-<button className='btn btn-primary'
-        onClick={::this.clearFilters}
->Очистить фильтр</button>
-<div style={{height: 400}} className='ag-blue'>
-            <AgGridReact
-
-                // binding to array properties
-                gridOptions={this.gridOptions}
-                columnDefs={this.state.columnDefs}
-                rowData={rowData}
-                onGridReady={::this.onGridReady}
-            />
-        </div>
-*/
-/*
-<BootstrapTable data={ rowData } striped={true} pagination={true} selectRow={selectRowProp}>
-  <TableHeaderColumn dataField='id' isKey={ true } dataSort={true}>ID</TableHeaderColumn>
-  <TableHeaderColumn dataField='releaseDate' dataFormat={dateFormatter} dataSort={true}>Дата</TableHeaderColumn>
-  <TableHeaderColumn dataField='realDate' dataSort={true}>Дата произв.</TableHeaderColumn>
-  <TableHeaderColumn dataField='finalDate' dataSort={true}>Дата отгр.</TableHeaderColumn>
-  <TableHeaderColumn dataField='currency' dataSort={true}>Валюта</TableHeaderColumn>
-  <TableHeaderColumn dataField='rate' dataSort={true}>Курс</TableHeaderColumn>
-  <TableHeaderColumn dataField='total_sum' dataFormat={priceFormatter} dataSort={true}>Сумма</TableHeaderColumn>
-  <TableHeaderColumn dataField='phase' dataSort={true}>Дост.</TableHeaderColumn>
-</BootstrapTable>
-*/
-
 function mapStateToProps(state) {
   return {
-    orderSpec: state.orderSpec,
-    user: state.user
+    getOrderSpec: (orderId) => {return state.orderSpec && state.orderSpec[orderId] && state.orderSpec[orderId].items || []},
+    getLoading: (orderId) => {return state.orderSpec && state.orderSpec[orderId] && state.orderSpec[orderId].loading},
+    token: state.user && state.user.token
   }
 }
 

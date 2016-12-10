@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import jwtDecode from 'jwt-decode';
 import { checkHttpStatus, parseJSON } from '../utils';
-import {ROOT_URL} from '../constants/Common';
+import {AUTH_ROOT_URL} from '../constants/Common';
 
 import {
   LOGIN_REQUEST,
@@ -118,7 +118,7 @@ export function loginUser(name, password/*, redirect='/'*/) {
 
     return function(dispatch) {
       dispatch(loginUserRequest());
-      return fetch(ROOT_URL + '/login', config)
+      return fetch(AUTH_ROOT_URL + '/login', config)
             .then(checkHttpStatus)
             .then(parseJSON)
             .then(response => {
@@ -210,7 +210,7 @@ export function signupUser(name, password, email) {
     }
     return function(dispatch) {
       dispatch(signupUserRequest());
-      return fetch(ROOT_URL + '/signup', config)
+      return fetch(AUTH_ROOT_URL + '/signup', config)
             .then(checkHttpStatus)
             .then(parseJSON)
             .then(response => {
@@ -293,7 +293,7 @@ export function validateEmail(token) {
     }
     return function(dispatch) {
       dispatch(validateEmailRequest());
-      return fetch(ROOT_URL + '/validateEmail/' + token, config)
+      return fetch(AUTH_ROOT_URL + '/validateEmail/' + token, config)
             .then(checkHttpStatus)
             .then(parseJSON)
             .then(response => {
@@ -371,7 +371,7 @@ export function meFromTokenDone(payload) {
 
 export function meFromToken(token) {
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
     headers: {
         'Authorization': `Bearer ${token}`
@@ -386,7 +386,7 @@ export function meFromToken(token) {
                         statusText: 'Пустой ключ'}
                       }));
     }
-    return fetch(ROOT_URL + '/meFromToken', config)
+    return fetch(AUTH_ROOT_URL + '/meFromToken', config)
           .then(checkHttpStatus)
           .then(parseJSON)
           .then(response => {

@@ -2,16 +2,12 @@
     'secret': 'myfirstwwwapp'
 };*/
 module.exports = {
-   server: {
-            host: 'localhost',
-            port: 3000
-    },
     db: {
-        database: 'trd',
-        username: 'root',
-        password: 'zaqwsX1',
+        database: 'eecv2r108jtb77u0',
+        username: 't2kxqw3sjje0beym',
+        password: 'dtuz98b39lv0rkx1',
         options: {
-                   host: 'localhost',
+                   host: 'zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
                    dialect: 'mysql',
                    pool: {max: 5,
                           min: 0,
@@ -24,7 +20,7 @@ module.exports = {
         tokenExpiry: 60*60*24 // expires in 24 hours
     },
     email: {
-        username: "elenachepygina@gmail.com",
+        username: "elenachepygina@yahoo.com",
         password: "gtktyf75",
         accountName: "WTrd",
         verifyEmailUrl: "verifyEmail"

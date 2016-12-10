@@ -6,7 +6,7 @@ import * as PaginateActions from '../../actions/PaginateActions'
 
 import TreeView from '../TreeView'
 import {ThumbnailsView} from '../ThumbnailsView'
-import Paginator from '../Paginator'
+import Paginator from '../../containers/Paginator'
 
 import './styles.scss'
 
@@ -90,6 +90,11 @@ export class Products extends Component{
       linkURL='/products/category/';
     }
 
+    let paginatorTemplate;
+    if (!selector.children) {
+      paginatorTemplate = <Paginator objKey='goods' linkURL={linkURL}/>
+    }
+
     return (
       <div className='row mainFrame'>
       <h1>Продукция</h1>
@@ -104,7 +109,7 @@ export class Products extends Component{
       </div>
       <div className='col-md-8 listView'>
         {!data || (data.length === 0)? <p>Нет товаров в выбранной категории</p>: ''}
-        {!selector.children ? <Paginator objKey='goods' linkURL={linkURL}/>: ''}
+        {paginatorTemplate}
         <ThumbnailsView
            galleryClassName='gallery'
            itemClassName='col-md-4 listViewItem'
@@ -118,7 +123,6 @@ export class Products extends Component{
     )
   }
 }
-
 
 function mapStateToProps(state) {
   return {

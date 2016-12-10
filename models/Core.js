@@ -41,7 +41,6 @@ function makeTree(result, items) {
 
 
 class DBCore  {
-  //let userOrders = {};
   syncDB(force) {
     db.sync({force: force});
   }
@@ -155,7 +154,7 @@ class DBCore  {
       });
  }
 
- getGoods(ggroup, limit, offset) {
+ getGGroupGoods(ggroup, limit, offset) {
    let orderBy = 'ORDER BY ga.name';
    let limitClause = '';
    if (limit) {
@@ -175,7 +174,7 @@ class DBCore  {
    );
  }
 
- getGoodsCnt(ggroup, callback) {
+ getGGroupGoodsCnt(ggroup, callback) {
    let filter = '';
    db.query(
      'SELECT count(ga.id) cnt '+
@@ -191,40 +190,8 @@ class DBCore  {
 
 }
 
-
-    /*OrderModel.OrderPr.findById(id,  { include: [ {model: OrderModel.OrderSpec, as: 'OrderSpec'} ] }).then(function(item) {
-      callback(item.OrderSpec);
-  });
-}*/
-  /*return OrderModel.OrderPr.findAll({
-    where: {
-    id: id
-  },
-     include: [ {model: OrderModel.OrderSpec, as: 'OrderSpec'} ]
-  });
-  }
-
-}*/
-
-
 let dbCore = new DBCore();
 //dbCore.syncDB(true);
-/*GGroup.bulkCreate([
-  {id:31232, parentId:24608, name:'3.2.1.1 Оборудование ELUMATEC LV'},
-  {id:31233, parentId:24608, name:'3.2.1.2 Оборудование URBAN LV'},
-  {id:31234, parentId:24608, name:'3.2.1.3 Оборудование FIMTEC LV'},
-  {id:31235, parentId:24608, name:'3.2.1.4 Оборудование Aluma LV'},
-  {id:31236, parentId:24608, name:'3.2.1.5 Оборудование ROTOX LV'},
-  {id:31237, parentId:24608, name:'3.2.1.6 Остальное производственное оборудование LV'},
-  {id:38567, parentId:24608, name:'3.2.1.9  Оборудование для гибки профиля LV'},
-  {id:24609, parentId:24596, name:'3.2.4 Рекламное LV'},
-  {id:24610, parentId:24596, name:'3.2.3 Системы безопасности LV'},
-  {id:24611, parentId:24596, name:'3.2.2 Сервисное, инструменты и офисный инвента LV'},
-  {id:31225, parentId:24596, name:'3.2.5 Торговое LV'},
-  {id:31226, parentId:24596, name:'3.2.6 Прочее LV'}
-
-
-]);*/
 /*dbCore.getGoodsCnt(24557).then(function(items) {
 
     console.log(items[0].cnt);

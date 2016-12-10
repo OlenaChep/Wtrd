@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -13,6 +14,15 @@ module.exports = {
   },
 
   module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loaders: ['eslint'],
+        include: [
+          path.resolve(__dirname, '../src'),
+        ],
+      }
+    ],
     loaders: [{
       test: /\.scss$/,
       loader: 'style!css?localIdentName=[path][name]--[local]!postcss-loader!sass',

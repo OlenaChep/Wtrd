@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as NewsActions from '../../actions/NewsActions'
 import './styles.scss'
-import {STATIC_URL} from '../../constants/Common';
 
-
-class NewsPage extends Component {
+export default class NewsPage extends Component {
+  static propTypes = {
+    published: React.PropTypes.object.isRequired,
+    imageURL: React.PropTypes.string.isRequired,
+    caption: React.PropTypes.string.isRequired,
+    text: React.PropTypes.string.isRequired,
+    fullText : React.PropTypes.string,
+    loadNewsPage: React.PropTypes.func.isRequired
+  }
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
     let id = + (this.props.params.id || 1);
-    this.props.actions.loadNewsPage(id);
+    this.props.loadNewsPage(id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -21,7 +24,7 @@ class NewsPage extends Component {
     let id = + (this.props.params.id || 1);
 
     if (id !== nextId) {
-      this.props.actions.loadNewsPage(nextId)
+      this.props.loadNewsPage(nextId)
     }
   }
 
@@ -32,6 +35,12 @@ class NewsPage extends Component {
                   };
     let published = this.props.published && this.props.published.toLocaleString('ru', options);
     let {text, fullText} = this.props;
+    let txtTemplate;
+    if (!fullText) {
+      txtTemplate = (text)
+    } else {
+      txtTemplate = (fullText)
+    }
     return(
       <div className='container'>
         <h3>{this.props.caption}</h3>
@@ -41,29 +50,10 @@ class NewsPage extends Component {
             <img src={this.props.imageURL} style={{height:150,width:150}}/>
           </div>
           <div className='news_text'>
-            {fullText? fullText: text}
+            {txtTemplate}
           </div>
         </div>
       </div>
     )
   }
 }
-
-function mapStateToProps(state) {
-  let newsPage = state.newsPage.data;
-  return {
-    published: newsPage && newsPage.releaseDate && new Date(newsPage.releaseDate),
-    imageURL: newsPage && (newsPage.imageURL || STATIC_URL + '/news.jpg'),
-    caption: newsPage && newsPage.caption,
-    text: newsPage && newsPage.text,
-    fullText: newsPage && newsPage.fullText
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(NewsActions, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewsPage)

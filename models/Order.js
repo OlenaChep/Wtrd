@@ -71,14 +71,6 @@ let OrderSpec = db.define('order_spec', {
 });
 OrderPr.hasMany(OrderSpec, { as: 'OrderSpec' });
 OrderSpec.belongsTo(OrderPr);
-//db.sync({force: true});
 
-//Sequelize.sync({ force: true });
-
-/*Contractor.sync().then(function() {
-
-Contractor.addNew('Bce', null).then(function(contractor) {
-  Contractor.addNew('Contr1', 3);
-})*/
 module.exports.OrderPr = OrderPr;
 module.exports.OrderSpec = OrderSpec;

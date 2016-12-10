@@ -6,9 +6,6 @@ import {
   GO_PAGE_FAIL
 } from '../constants/Paginate';
 
-//const cPrev = -1;
-//const cNext = 10000;
-
 function SetParams(objKey, payload) {
   return {
     type: SET_PARAMS,
@@ -107,7 +104,7 @@ const goPage = (objKey, nextPage, state) => {
                          });
     }
     dispatch(GoPageRequest(objKey, {nextPage: nextPage}));
-    let pageURL = (nextPage === 1)? objState.navURL: objState.navURL + '/page/' + nextPage;
+    let pageURL = (nextPage === 1)? objState.navURL : objState.navURL + '?page=' + nextPage;
     //alert(pageURL);
     return objState.fetchFunc(objState.perPage, nextPage, pageURL)
                    .then(() => {
@@ -133,121 +130,15 @@ const goPage = (objKey, nextPage, state) => {
 export const GoPage = (objKey, nextPage) => (dispatch, getState) => {
    dispatch(goPage(objKey, nextPage, getState()));
 }
-/*
-const cloneNavList = (navList) => {
-  let newNavList = {};
-  for(let key in navList) {
-    let navLink = {...navList[key]};
-    newNavList[key] = navLink;
-  }
-  return newNavList;
+
+export const InitializePages = (objKey, objCountFunc, perPage, navCount = 5, navURL,
+    fetchFunc, currPage) => (dispatch, getState) => {
+
+  objCountFunc(objKey).then(() => {
+    let state = getState();
+    let objCount = state.objCount[objKey].data;
+    dispatch(PreparePagination(objKey, perPage, objCount, navCount, navURL, fetchFunc));
+    dispatch(GoPage(objKey, currPage));
+  })
+  
 }
-
-const nextPageInNavList = (nextPage, navList) => {
-  for(let key in navList) {
-    if (navList[key].caption == nextPage) {
-      return true;
-    }
-  }
-  return false;
-}
-
-
-const goNextPage = (objKey, state) => {
-  return(dispatch) => {
-    let currPage = state.paginate[objKey].currPage;
-    let nextPage = currPage + 1;
-    let pageCount = state.paginate[objKey].pageCount;
-    if (nextPage <= pageCount) {
-      dispatch(GoPage(objKey, {currPage: nextPage}));
-
-      let navList = state.paginate[objKey].navList;
-      let needUpdList = (!navList[cPrev].enabled) || (navList[cNext].enabled && (nextPage === pageCount));
-      let isNextPageInNavList = nextPageInNavList(nextPage, navList);
-
-      if (needUpdList || !isNextPageInNavList) {
-        let navList = cloneNavList(state.paginate[objKey].navList);
-        navList[cPrev].enabled = true;
-        navList[cNext].enabled = (nextPage < pageCount);
-
-        if (!isNextPageInNavList) {
-          for(let key in navList) {
-            if (typeof navList[key].caption === 'number') {
-              navList[key].caption++;
-            }
-          }
-        }
-        dispatch(UpdNavList(objKey, {navList: navList}));
-      }
-    }
-  }
-}
-
-const goPrevPage = (objKey, state) => {
-  return(dispatch) => {
-    let currPage = state.paginate[objKey].currPage;
-    let nextPage = currPage - 1;
-    if (nextPage >= 1) {
-      dispatch(GoPage(objKey, {currPage: nextPage}));
-
-      let navList = state.paginate[objKey].navList;
-      let needUpdList = (!navList[cNext].enabled) || (navList[cPrev].enabled && (nextPage === 1));
-      let isNextPageInNavList = nextPageInNavList(nextPage, navList);
-
-      if (needUpdList || !isNextPageInNavList) {
-        let navList = cloneNavList(state.paginate[objKey].navList);
-        navList[cNext].enabled = true;
-        navList[cPrev].enabled = (nextPage !== 1);
-
-        if (!isNextPageInNavList) {
-          for(let key in navList) {
-            if (typeof navList[key].caption === 'number') {
-              navList[key].caption--;
-            }
-          }
-        }
-        dispatch(UpdNavList(objKey, {navList: navList}));
-      }
-    }
-  }
-}
-
-export const GoNextPage = (objKey) => (dispatch, getState) => {
-   dispatch(goNextPage(objKey, getState()));
-}
-
-export const GoPrevPage = (objKey) => (dispatch, getState) => {
-   dispatch(goPrevPage(objKey, getState()));
-}
-
-const goPage = (objKey, nextPage, state) => {
-  return(dispatch) => {
-    let currPage = state.paginate[objKey].currPage;
-    let pageCount = state.paginate[objKey].pageCount;
-    if ((nextPage <= 0)||(nextPage > pageCount)) {
-
-    }
-
-  }
-}*/
-
-/*
-export function UpdNavList(objKey, payload) {
-  return {
-    type: UPD_NAV_LIST,
-    objKey,
-    payload: {
-      navList: payload.navList
-    }
-  }
-}
-
-export function GoPage(objKey, payload) {
-  return {
-    type: GO_PAGE,
-    objKey,
-    payload: {
-      currPage: payload.currPage
-    }
-  }
-}*/

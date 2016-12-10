@@ -46,7 +46,7 @@ export function loadOrdersSuccess(userId, payload) {
 
 export function loadOrders(userId, token) {
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
     headers: {
         'Authorization': `Bearer ${token}`
@@ -162,7 +162,7 @@ export const loadOrderSpecIfNeeded = (orderId, token) => (dispatch, getState) =>
 
 export function loadOrderSpec(orderId, token) {
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
     headers: {
         'Authorization': `Bearer ${token}`

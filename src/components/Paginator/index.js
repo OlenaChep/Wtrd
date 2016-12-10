@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { connect } from 'react-redux'
 
-export class Paginator extends Component {
+export default class Paginator extends Component {
    propTypes: {
         objKey: React.PropTypes.string.isRequired,
         linkURL: React.PropTypes.string.isRequired,
@@ -44,7 +43,6 @@ export class Paginator extends Component {
       //Next button
       template[navMaxCnt + 1] = <li key={navMaxCnt + 1} className={currPage < pageCount ? '': 'disabled'}><Link to={::this.getLink(currPage + 1, pageCount, linkURL)}>&raquo;</Link></li>
     }
-    
     return (
       <ul className='pagination pagination-sm'>
         {template}
@@ -59,16 +57,3 @@ Paginator.defaultProps = {
   firstPage: 1,
   pageCount: 1
 };
-
-
-function mapStateToProps(state, ownProps) {
-    let objKey = ownProps.objKey;
-    return {
-      pageCount: state.paginate[objKey] && state.paginate[objKey].pageCount,
-      currPage: state.paginate[objKey] && state.paginate[objKey].currPage,
-      firstPage: state.paginate[objKey] && state.paginate[objKey].firstPage,
-      navMaxCnt: state.paginate[objKey] && state.paginate[objKey].navMaxCnt
-    }
-  }
-
-export default connect(mapStateToProps)(Paginator)

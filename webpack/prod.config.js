@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -19,11 +20,10 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"',
-      },
-      __DEVELOPMENT__: false,
-    }),
+          'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+          }
+        }),
     new ExtractTextPlugin('bundle.css'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -32,5 +32,12 @@ module.exports = {
         warnings: false,
       },
     }),
+    new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        }),
+    new Visualizer({
+      filename: './statistics.html'
+    })
   ],
 };

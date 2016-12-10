@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { checkHttpStatus, parseJSON } from '../utils';
+import { checkHttpStatus, parseJSON, getPageFetchURL } from '../utils';
 import {
   LOAD_NEWS_REQUEST,
   LOAD_NEWS_FAIL,
@@ -75,13 +75,13 @@ export function loadNewsLengthSuccess(objKey, payload) {
 }
 
 export function loadNews(perPage, nextPage, pageURL) {
-  let start = perPage * (nextPage - 1);
-  let limit = perPage;
+  let fetchURL = getPageFetchURL(perPage, nextPage, pageURL);
 
+  //console.log(fetchURL);
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
-    body: JSON.stringify({limit: limit, offset: start}),
+    //body: JSON.stringify({limit: limit, offset: start}),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ export function loadNews(perPage, nextPage, pageURL) {
   }
   return function(dispatch) {
     dispatch(loadNewsRequest());
-    return fetch(pageURL, config)
+    return fetch(fetchURL, config)
           .then(checkHttpStatus)
           .then(parseJSON)
           .then(response => {
@@ -113,7 +113,7 @@ export function loadNews(perPage, nextPage, pageURL) {
 
 export function loadNewsLength(objKey) {
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
     headers: {
       'Accept': 'application/json',

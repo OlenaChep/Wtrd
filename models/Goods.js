@@ -60,11 +60,6 @@ let PriceList = db.define('price_list', {
 });
 GoodsAll.hasOne(PriceList);
 
-/*Contractor.sync().then(function() {
-
-Contractor.addNew('Bce', null).then(function(contractor) {
-  Contractor.addNew('Contr1', 3);
-})*/
 module.exports.GoodsAll = GoodsAll;
 module.exports.Promo = Promo;
 module.exports.PromoPeriod = PromoPeriod;

@@ -18,7 +18,7 @@ import {ROOT_URL} from '../constants/Common';
 
 import * as PaginateActions from './PaginateActions'
 import { bindActionCreators } from 'redux'
-import {makeActionCreator,  makeDataLoader} from '../utils'
+import {makeActionCreator,  makeDataLoader, getPageFetchURL} from '../utils'
 
 
 export const loadProductCategoriesRequest = makeActionCreator('LOAD_PRODUCT_CATEGORIES_REQUEST')
@@ -227,7 +227,6 @@ export const selectCategory = (id, doClose, nextPage) => (dispatch, getState) =>
                   }
                 }));
       if (!childs) {
-        console.log(nextPage);
         dispatch(loadCategoryProducts(id, (nextPage || 1), true));
       }
     }
@@ -262,22 +261,22 @@ const loadCategoryProducts = (id, nextPage, doPreparePaginate) => (dispatch, get
 }
 
 export function loadProducts(perPage, nextPage, pageURL) {
-  let start = perPage * (nextPage - 1);
-  let limit = perPage;
+  let fetchURL = getPageFetchURL(perPage, nextPage, pageURL);
 
   let config = {
-    method: 'POST',
+    method: 'GET',
     credentials: 'include',
-    body: JSON.stringify({limit: limit, offset: start}),
+    //body: JSON.stringify({limit: limit, offset: start}),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
      }
   }
-  return loadProducts_(null, {config: config, dataURL: pageURL});
+  return loadProducts_(null, {config: config, dataURL: fetchURL});
 }
 
 export function getProductsCount(category) {
-  let dataURL = ROOT_URL + '/ggroups/' + category + '/cnt';
+  let dataURL = ROOT_URL + '/ggroups/' + category + '/goodsAll/cnt';
+  
   return loadProductsCount_('goods', {dataURL: dataURL});
 }

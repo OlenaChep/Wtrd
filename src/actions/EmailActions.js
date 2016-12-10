@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 //import jwtDecode from 'jwt-decode';
 import { checkHttpStatus, parseJSON } from '../utils';
-import {ROOT_URL} from '../constants/Common';
+import {AUTH_ROOT_URL} from '../constants/Common';
 
 import {
   RESEND_VALIDATION_EMAIL_REQUEST,
@@ -52,7 +52,7 @@ return function(dispatch) {
                     }));
   }
 
-  return fetch(ROOT_URL + '/resendValidationEmail', config)
+  return fetch(AUTH_ROOT_URL + '/resendValidationEmail', config)
         .then(checkHttpStatus)
         .then(parseJSON)
         .then(response => {

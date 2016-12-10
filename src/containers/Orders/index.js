@@ -32,6 +32,13 @@ class OrderExtBtnGroup extends Component {
 }
 
 class Orders extends Component {
+  static propTypes = {
+    userId: React.PropTypes.number,
+    token: React.PropTypes.string,
+    orders: React.PropTypes.array,
+    loading:  React.PropTypes.bool
+  }
+
   constructor(props) {
     super(props);
     this.orderGridName = 'orders';
@@ -69,22 +76,12 @@ class Orders extends Component {
     }
   }
 
-  getUserId(user) {
-    if (!user) {
-      return undefined;
-    } else {
-      return user.id;
-    }
-  }
-
-
   selectOrder(orderId) {
     this.props.gridActions.gridSetCurrRowKey(this.orderGridName, orderId);
   }
 
   GridReadyEvent(params) {
     this.api = params.api;
-    console.log(params.columnApi);
     this.columnApi = params.columnApi;
   }
 
@@ -103,13 +100,13 @@ class Orders extends Component {
 
 
   componentDidMount() {
-    this.props.actions.loadOrdersIfNeeded(this.getUserId(this.props.user.user), this.props.user.token);
+    this.props.actions.loadOrdersIfNeeded(this.props.userId, this.props.token);
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((this.getUserId(nextProps.user.user) !== this.getUserId(this.props.user.user)) ||
-       (nextProps.user.token !== this.props.user.token)) {
-      this.props.actions.loadOrdersIfNeeded(this.getUserId(nextProps.user.user), nextProps.user.token);
+    if ((nextProps.userId !== this.props.userId) ||
+       (nextProps.token !== this.props.token)) {
+      this.props.actions.loadOrdersIfNeeded(nextProps.userId, nextProps.token);
     }
   }
 
@@ -134,28 +131,23 @@ class Orders extends Component {
   onRefreshData(e) {
     e.preventDefault();
     this.collapseAll();
-    let userId = this.getUserId(this.props.user.user);
-    this.props.actions.loadOrders(userId, this.props.user.token)
+    let userId = this.props.userId;
+    this.props.actions.loadOrders(userId, this.props.token)
                       .then(() => {
                         if (userId) {
                           this.props.actions.InvalidateAllOrderSpec(userId);
                         }
                        })
                       .catch(error => {alert(error);});
-
-
   }
 
 
   render() {
-    let rowData = [];
-    if (this.props.user.user && this.props.orders[this.props.user.user.id]) {
-      rowData = this.props.orders[this.props.user.user.id].items;
-    }
+    let rowData = this.props.orders;
+
     let height = 700;
-    let loading = this.props.user.user && this.props.orders[this.props.user.user.id] &&
-      this.props.orders[this.props.user.user.id].loading;
-    //let btnGroup = OrderExtBtnGroup();
+    let loading = this.props.loading;
+
     return (
       <div className='container'>
         <h1>Заказы</h1>
@@ -175,62 +167,15 @@ class Orders extends Component {
     )
   }
 }
-//
-/*
 
-*/
-
-/*
-<div className='ag-blue' style={{height: 400}}>
-          <AgGridReact
-              gridOptions={this.gridOptions}
-              columnDefs={this.columnDefs}
-              rowData={rowData}
-              onGridReady={::this.onGridReady}
-              onSelectionChanged={::this.onSelectionChanged}
-          />
-</div>
-onSelectionChanged={::this.onSelectionChanged}
-<OrderSpec
-  orderId={orderId}
-/>*/
-
-//  onGridReady={::this.onGridReady}
-/*
-
-*/
-/*
-<button className='btn btn-primary'
-        onClick={::this.clearFilters}
->Очистить фильтр</button>
-<div style={{height: 400}} className='ag-blue'>
-            <AgGridReact
-
-                // binding to array properties
-                gridOptions={this.gridOptions}
-                columnDefs={this.state.columnDefs}
-                rowData={rowData}
-                onGridReady={::this.onGridReady}
-            />
-        </div>
-*/
-/*
-<BootstrapTable data={ rowData } striped={true} pagination={true} selectRow={selectRowProp}>
-  <TableHeaderColumn dataField='id' isKey={ true } dataSort={true}>ID</TableHeaderColumn>
-  <TableHeaderColumn dataField='releaseDate' dataFormat={dateFormatter} dataSort={true}>Дата</TableHeaderColumn>
-  <TableHeaderColumn dataField='realDate' dataSort={true}>Дата произв.</TableHeaderColumn>
-  <TableHeaderColumn dataField='finalDate' dataSort={true}>Дата отгр.</TableHeaderColumn>
-  <TableHeaderColumn dataField='currency' dataSort={true}>Валюта</TableHeaderColumn>
-  <TableHeaderColumn dataField='rate' dataSort={true}>Курс</TableHeaderColumn>
-  <TableHeaderColumn dataField='total_sum' dataFormat={priceFormatter} dataSort={true}>Сумма</TableHeaderColumn>
-  <TableHeaderColumn dataField='phase' dataSort={true}>Дост.</TableHeaderColumn>
-</BootstrapTable>
-*/
 function mapStateToProps(state) {
   return {
-    user: state.user,
-    orders: state.orders,
-    grids: state.grids
+    token: state.user && state.user.token,
+    userId: state.user && state.user.user && state.user.user.id,
+    orders: state.orders && state.user && state.user.user && state.orders[state.user.user.id] &&
+      state.orders[state.user.user.id].items || [],
+    loading: state.user && state.user.user && state.orders && state.orders[state.user.user.id] &&
+      state.orders[state.user.user.id].loading
   }
 }
 

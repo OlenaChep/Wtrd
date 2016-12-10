@@ -10,8 +10,8 @@ let smtpConfig = {
     host: 'smtp.mail.yahoo.com',
     port: 465,
     auth: {
-        user: 'elenachepygina@yahoo.com',
-        pass: 'gtktyf75'
+        user: Config.email.username,
+        pass: Config.email.password
     }
 };
 /*let auth = {
@@ -29,7 +29,7 @@ let smtpTransport = nodemailer.createTransport(smtpConfig);
 function mail(from, email, subject, mailbody, callback){
 
     let mailOptions = {
-        from: 'elenachepygina@yahoo.com', // sender address
+        from: Config.email.username, // sender address
         to: email, // list of receivers
         subject: subject, // Subject line
         //text: result.price, // plaintext body
@@ -65,11 +65,12 @@ function mail(from, email, subject, mailbody, callback){
 
 }
 
-exports.sendMailVerificationLink = function(user, token, callback) {
+exports.sendMailVerificationLink = function(user, host, token, callback) {
+    let host_ = host.indexOf('localhost') >= 0 ? 'http://' + host : 'https://' + host;
     let from = Config.email.accountName + " Team<" + Config.email.username + ">";
     let mailbody = "<p>Спасибо за регистарцию на "+ Config.email.accountName +
-      " </p><p>Подтвердите Ваш email, перейдя по ссылке: <br/><a href='http://" +
-      Config.server.host+":"+ Config.server.port+"/"+Config.email.verifyEmailUrl+"/"+token+"'>Подтверждение Email</a></p>";
+      " </p><p>Подтвердите Ваш email, перейдя по ссылке: <br/><a href='" +
+      host_ + "/" + Config.email.verifyEmailUrl + "/" + token + "'>Подтверждение Email</a></p>";
     mail(from, user.email, "Верификация регистрации", mailbody, callback);
 };
 

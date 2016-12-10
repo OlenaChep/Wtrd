@@ -12,7 +12,7 @@ const PATHS = {
   app: path.join(__dirname, '../src'),
   build: path.join(__dirname, '../dist'),
 };
-//console.log('path app='||PATHS.app);
+console.log(TARGET);
 process.env.BABEL_ENV = TARGET;
 
 const common = {
@@ -35,15 +35,6 @@ const common = {
   },
 
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        loaders: ['eslint'],
-        include: [
-          path.resolve(__dirname, '../src'),
-        ],
-      }
-    ],
     loaders: [{
       test: /bootstrap-sass\/assets\/javascripts\//,
       loader: 'imports?jQuery=jquery',
@@ -99,5 +90,7 @@ if (TARGET === 'start' || !TARGET) {
 }
 
 if (TARGET === 'build' || !TARGET) {
+  a =  merge(production, common);
+  console.log(process.env.NODE_ENV);
   module.exports = merge(production, common);
 }
